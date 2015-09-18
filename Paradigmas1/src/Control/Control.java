@@ -17,15 +17,15 @@ public class Control {
     private static Control control;
     private Modelo modelo;
 
-    private Control(Modelo modelo) {
-        this.modelo = modelo;
+    private Control() {
+        this.modelo = Modelo.obtenerInstancia();
     }
 
-    public static Control obtenerInstancia(Modelo modelo) {
-        return (control == null) ? control = new Control(modelo) : control;
+    public static Control obtenerInstancia() {
+        return (control == null) ? control = new Control() : control;
     }
-    
-    public void agregarObservable(Observer o){
+
+    public void agregarObservable(Observer o) {
         modelo.addObserver(o);
     }
 }

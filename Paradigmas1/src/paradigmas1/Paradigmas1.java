@@ -5,6 +5,9 @@
  */
 package paradigmas1;
 
+import Control.Control;
+import Vista.Ventana;
+
 /**
  *
  * @author ubuntu
@@ -15,7 +18,9 @@ public class Paradigmas1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Hola Mundo por Bryan de Heredia");
+        Control control = Control.obtenerInstancia();
+        Ventana ventana1 = new Ventana(control);
+        control.agregarObservable(ventana1);
     }
     
 }
