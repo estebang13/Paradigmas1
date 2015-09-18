@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
 /**
@@ -14,9 +15,10 @@ import java.util.Observable;
 public class Modelo extends Observable {
 
     private static Modelo modelo;
+    private ArrayList<Gramatica> gramaticas;
 
     private Modelo() {
-
+        gramaticas = new ArrayList<>();
     }
 
     public static Modelo obtenerInstancia() {
