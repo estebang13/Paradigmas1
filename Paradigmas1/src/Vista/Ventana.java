@@ -6,6 +6,7 @@
 package Vista;
 
 import Control.Control;
+import Modelo.ArchivoFiltro;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -14,9 +15,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -152,10 +156,47 @@ public class Ventana extends JFrame implements Observer {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("listener cargar granatica");
+                System.out.println("listener cargar gramática");
             }
         });
         menuItem2.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("listener cargar entradas");
+            }
+        });
+        menuItem3.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fs = new JFileChooser(new File("temporal"));
+                fs.setDialogTitle("Salvar archivo de gramatica");
+                fs.setFileFilter(new ArchivoFiltro(".xml", "XML File"));
+                int resul = fs.showSaveDialog(null);
+                if(resul == JFileChooser.APPROVE_OPTION){
+                    String content = textArea1.getText();
+                    File fi = fs.getSelectedFile();
+                    try{
+                        FileWriter fw = new FileWriter(fi.getPath());
+                        fw.write(content);
+                        fw.flush();
+                        fw.close();
+                    }catch(Exception ex){
+                        System.out.println(ex.getMessage());
+                    }
+                    
+                }
+            }
+        });
+        menuItem4.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("listener cargar entradas");
+            }
+        });
+        menuItem5.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
