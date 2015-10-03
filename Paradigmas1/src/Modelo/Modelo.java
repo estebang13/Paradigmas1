@@ -42,6 +42,15 @@ public class Modelo extends Observable {
         }
         return bandera;
     }
+    
+    public void aplicarAlgoritmo(String entrada){
+        markov.setEntrada(entrada);
+        markov.aplicarAlgoritmo();
+    }
+
+    public String getEntradaModificada() {
+        return markov.getEntrada();
+    }
 
     public void actualizar() {
         setChanged();

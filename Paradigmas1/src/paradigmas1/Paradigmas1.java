@@ -42,7 +42,7 @@ public class Paradigmas1 {
 //                + "\u03B7\u03B8\u03B9\u03BA\u03BB\u03BC\u03BD\u03BE\u03BF\u03C0\u03C1"
 //                + "\u03C2\u03C3\u03C4\u03C5\u03C6\u03C7\u03C8\u03C9");
 //        Pattern pattern3 = Pattern.compile("(^a-z)|(^0-9)");
-//        Pattern pattern4 = Pattern.compile("[^abc]");
+//        Pattern pattern4 = Pattern.compile("[abcdefghijklmnopqrstuvwxyz0123456789]");
 //        Matcher m = pattern4.matcher("ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω");
 //        if (m.find()) {
 //            System.out.println("aceptada");

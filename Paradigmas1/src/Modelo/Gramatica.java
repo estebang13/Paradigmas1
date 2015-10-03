@@ -19,7 +19,7 @@ public class Gramatica {
     private static final String ALFABETOFINAL = "abcdefghijklmnopqrstuvwxyz0123456789";
     private static final String VARIABLESFINAL = "wxyz";
     private static final String MARCADORES = "αβγδ";
-    Pattern ExprGrieg = Pattern.compile("[Α-ω]");
+    private Pattern ExprGrieg = Pattern.compile("[Α-ω]");
     private String alfabeto = "";
     private String variables = "";
     private String marcadores = "";
