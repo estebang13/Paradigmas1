@@ -5,6 +5,7 @@
  */
 package Control;
 
+import Modelo.Gramatica;
 import Modelo.Modelo;
 import java.util.Observer;
 
@@ -23,6 +24,10 @@ public class Control {
 
     public static Control obtenerInstancia() {
         return (control == null) ? control = new Control() : control;
+    }
+    
+    public Gramatica getGramatica(){
+        return modelo.getGramatica();
     }
 
     public void agregarObservable(Observer o) {

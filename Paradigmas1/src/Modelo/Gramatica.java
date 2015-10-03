@@ -6,114 +6,109 @@
 package Modelo;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
  * @author Brayan
  */
 public class Gramatica {
-    
-    private int id;
-    private ArrayList<String> comentarios;
-    private ArrayList<String> simbolos;
-    private ArrayList<String> variables;
-    private ArrayList<String> marcadores;
-    private ArrayList<String> patrones;
-    
-    public Gramatica(int id){
+
+    private String id;
+    private static final String ALFABETOFINAL = "abcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String VARIABLESFINAL = "wxyz";
+    private static final String MARCADORES = "αβγδ";
+    Pattern ExprGrieg = Pattern.compile("[Α-ω]");
+    private String alfabeto = "";
+    private String variables = "";
+    private String marcadores = "";
+    private ArrayList<Regla> reglas;
+
+    public Gramatica(String id) {
         this.id = id;
-        comentarios = new ArrayList<>();
-        simbolos = new ArrayList<>();
-        variables = new ArrayList<>();
-        marcadores = new ArrayList<>();
-        patrones = new ArrayList<>();
-    }
-    
-    public boolean insertarComentario(String comentario){
-        return comentarios.add(comentario);
-    }
-    
-    public boolean insertarSimbolo(String simbolo){
-        return simbolos.add(simbolo);
-    }
-    
-    public boolean insertarVariables(String variable){
-        return variables.add(variable);
-    }
-    
-    public boolean insertarMarcador(String marcador){
-        return marcadores.add(marcador);
-    }
-    
-    public boolean insertarPatron(String patron){
-        return patrones.add(patron);
-    }
-    
-    public String getComentarioPos(int pos){
-        return comentarios.get(pos);
-    }
-    
-    public String getSimboloPos(int pos){
-        return simbolos.get(pos);
-    }
-    
-    public String getVariablesPos(int pos){
-        return variables.get(pos);
-    }
-    
-    public String getMarcadorPos(int pos){
-        return marcadores.get(pos);
-    }
-    
-    public String getPatronPos(int pos){
-        return patrones.get(pos);
+        this.reglas = new ArrayList<>();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public ArrayList<String> getComentarios() {
-        return comentarios;
-    }
+    public boolean comprobarGramatica(String original) {
+        boolean cumple = true;
+        String[] vec = original.split("\n");
+        for (int i = 0; i < vec.length; i++) {
+            if (!vec[i].equals("")) {
+                if (vec[i].contains("#symbols")) {
+                    alfabeto = vec[i].substring(8);
+                    System.out.println("contiene secuencia y alfabeto es: " + alfabeto);
+                }
+                if (vec[i].contains("#vars")) {
+                    variables = vec[i].substring(5);
+                    System.out.println("contiene secuencia y variables son: " + variables);
+                }
+                if (vec[i].contains("#markers")) {
+                    marcadores = vec[i].substring(8);
+                    System.out.println("contiene secuencia y marcadores son: " + marcadores);
+                }
+                if ((!marcadores.equals("")) && (!alfabeto.equals("")) && (!variables.equals(""))) {
+                    break;
+                }
+            }
+        }
+        if (alfabeto.equals("")) {
+            alfabeto = ALFABETOFINAL;
+        }
+        if (variables.equals("")) {
+            variables = VARIABLESFINAL;
+        }
+        if (marcadores.equals("")) {
+            marcadores = MARCADORES;
+        }
 
-    public void setComentarios(ArrayList<String> comentarios) {
-        this.comentarios = comentarios;
-    }
-
-    public ArrayList<String> getSimbolos() {
-        return simbolos;
-    }
-
-    public void setSimbolos(ArrayList<String> simbolos) {
-        this.simbolos = simbolos;
-    }
-
-    public ArrayList<String> getVariables() {
-        return variables;
-    }
-
-    public void setVariables(ArrayList<String> variables) {
-        this.variables = variables;
-    }
-
-    public ArrayList<String> getMarcadores() {
-        return marcadores;
-    }
-
-    public void setMarcadores(ArrayList<String> marcadores) {
-        this.marcadores = marcadores;
-    }
-
-    public ArrayList<String> getPatrones() {
-        return patrones;
-    }
-
-    public void setPatrones(ArrayList<String> patrones) {
-        this.patrones = patrones;
+        Matcher m = ExprGrieg.matcher(alfabeto);
+        if (!m.find()) {
+            m = ExprGrieg.matcher(variables);
+            if (!m.find()) {
+                for (int i = 0; i < variables.length(); i++) {
+                    if (!alfabeto.contains(String.valueOf(variables.charAt(i)))) {
+                        cumple = false;
+                        break;
+                    }
+                }
+                if (cumple) {
+                    Pattern alfa = Pattern.compile("[a-z0-9]");
+                    m = alfa.matcher(marcadores);
+                    if (!m.find()) {
+                        //m = alfa.matcher(marcadores);////////////////////////////////////////////7
+                        for (int i = 0; i < vec.length; i++) {
+                            if (!vec[i].equals("")) {
+                                if ((!vec[i].contains("#symbols")) && (!vec[i].contains("#vars"))
+                                        && (!vec[i].contains("#markers"))) {
+                                    System.out.println(vec[i]);
+                                    String[] reg = vec[i].split("→");
+                                    reglas.add(new Regla(reg[0], reg[1]));
+                                }
+                            }
+                        }
+                    } else {
+                        cumple = false;
+                    }
+                }
+            } else {
+                cumple = false;
+            }
+        } else {
+            cumple = false;
+        }
+        for (int i = 0; i < reglas.size(); i++) {
+            System.out.println("reglas "+ i +" "+reglas.get(i).getInicio()+" -> "+
+                    reglas.get(i).getTrans());
+        }
+        return cumple;
     }
 }

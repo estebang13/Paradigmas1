@@ -15,18 +15,12 @@ import java.util.Iterator;
 public class Markov1 {
     
     private ArrayList<String> reglas;
-    private ArrayList<String> alfabeto;
-    private ArrayList<String> variables;
-    private ArrayList<String> marcadores;
-    private static String expresionRegular = "";
-    private String entradaSustitucion = "";
+    private String alfabeto;
+    private String variables;
+    private String marcadores;
     
     
     public Markov1(){
-        reglas = new ArrayList<>();
-        alfabeto = new ArrayList<>();
-        variables = new ArrayList<>();
-        marcadores = new ArrayList<>();
     }
     
     public void aplicarAlgoritmo(String entrada){
@@ -40,8 +34,9 @@ public class Markov1 {
         boolean bandera = false;
         int i = 0;
         for (String regla : reglas) {
-            for (int j = 0; j < entrada.length(); j++) {
-                
+            int tamanioRegla = regla.length();
+            i=0;
+            while(i+3!=entrada.length()){
             }
         }
         return bandera;

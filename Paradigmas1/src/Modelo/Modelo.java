@@ -15,14 +15,20 @@ import java.util.Observable;
 public class Modelo extends Observable {
 
     private static Modelo modelo;
-    private ArrayList<Gramatica> gramaticas;
+    //private ArrayList<Gramatica> gramaticas;
+    private Gramatica gramatica;
 
     private Modelo() {
-        gramaticas = new ArrayList<>();
+        //gramaticas = new ArrayList<>();
+        gramatica = new Gramatica("1");
     }
 
     public static Modelo obtenerInstancia() {
         return (modelo == null) ? modelo = new Modelo() : modelo;
+    }
+    
+    public Gramatica getGramatica(){
+        return gramatica;
     }
 
     public void actualizar() {
