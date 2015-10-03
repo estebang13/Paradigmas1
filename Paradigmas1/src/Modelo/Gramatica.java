@@ -30,14 +30,38 @@ public class Gramatica {
         this.reglas = new ArrayList<>();
     }
 
-    public String getId() {
-        return id;
+    public String getAlfabeto() {
+        return alfabeto;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setAlfabeto(String alfabeto) {
+        this.alfabeto = alfabeto;
     }
 
+    public String getVariables() {
+        return variables;
+    }
+
+    public void setVariables(String variables) {
+        this.variables = variables;
+    }
+
+    public String getMarcadores() {
+        return marcadores;
+    }
+
+    public void setMarcadores(String marcadores) {
+        this.marcadores = marcadores;
+    }
+
+    public ArrayList<Regla> getReglas() {
+        return reglas;
+    }
+
+    public void setReglas(ArrayList<Regla> reglas) {
+        this.reglas = reglas;
+    }
+    
     public boolean comprobarGramatica(String original) {
         boolean cumple = true;
         String[] vec = original.split("\n");

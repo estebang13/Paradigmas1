@@ -15,12 +15,13 @@ import java.util.Observable;
 public class Modelo extends Observable {
 
     private static Modelo modelo;
-    //private ArrayList<Gramatica> gramaticas;
+    private Markov1 markov;
     private Gramatica gramatica;
 
     private Modelo() {
         //gramaticas = new ArrayList<>();
         gramatica = new Gramatica("1");
+        markov = new Markov1();
     }
 
     public static Modelo obtenerInstancia() {
@@ -29,6 +30,17 @@ public class Modelo extends Observable {
     
     public Gramatica getGramatica(){
         return gramatica;
+    }
+    
+    public boolean comprobarGramatica(String original){
+        boolean bandera = gramatica.comprobarGramatica(original);
+        if(bandera){
+            markov.setAlfabeto(gramatica.getAlfabeto());
+            markov.setMarcadores(gramatica.getMarcadores());
+            markov.setVariables(gramatica.getVariables());
+            markov.iniciarListaVariables();
+        }
+        return bandera;
     }
 
     public void actualizar() {

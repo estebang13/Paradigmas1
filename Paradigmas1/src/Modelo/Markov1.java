@@ -6,39 +6,70 @@
 package Modelo;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  *
  * @author Brayan
  */
 public class Markov1 {
-    
-    private ArrayList<String> reglas;
+
+    private ArrayList<Regla> listaReglas;
+    private ArrayList<Variable> listaVariables;
     private String alfabeto;
     private String variables;
     private String marcadores;
-    
-    
-    public Markov1(){
+
+    public Markov1() {
+        this.listaReglas = new ArrayList<>();
+        this.listaVariables = new ArrayList<>();
+        this.alfabeto = "";
+        this.variables = "";
+        this.marcadores = "";
+    }
+
+    public ArrayList<Regla> getListaReglas() {
+        return listaReglas;
+    }
+
+    public void setListaReglas(ArrayList<Regla> listaReglas) {
+        this.listaReglas = listaReglas;
+    }
+
+    public ArrayList<Variable> getListaVariables() {
+        return listaVariables;
+    }
+
+    public void setListaVariables(ArrayList<Variable> listaVariables) {
+        this.listaVariables = listaVariables;
+    }
+
+    public String getAlfabeto() {
+        return alfabeto;
+    }
+
+    public void setAlfabeto(String alfabeto) {
+        this.alfabeto = alfabeto;
+    }
+
+    public String getVariables() {
+        return variables;
+    }
+
+    public void setVariables(String variables) {
+        this.variables = variables;
+    }
+
+    public String getMarcadores() {
+        return marcadores;
+    }
+
+    public void setMarcadores(String marcadores) {
+        this.marcadores = marcadores;
     }
     
-    public void aplicarAlgoritmo(String entrada){
-        boolean bandera = true;
-        while(bandera){
-           bandera = aplicarRegla(entrada);
+    public void iniciarListaVariables(){
+        for (int i = 0; i < variables.length(); i++) {
+            listaVariables.add(new Variable(String.valueOf(variables.charAt(i)), ""));
         }
-    }
-    
-    public boolean aplicarRegla(String entrada){
-        boolean bandera = false;
-        int i = 0;
-        for (String regla : reglas) {
-            int tamanioRegla = regla.length();
-            i=0;
-            while(i+3!=entrada.length()){
-            }
-        }
-        return bandera;
     }
 }
