@@ -235,7 +235,11 @@ public class Ventana extends JFrame implements Observer {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                if(textArea2.getText().equals("")){
+                    JOptionPane.showMessageDialog(null, "Debe de escribir una hilera de entrada");
+                }else{
+                    control.aplicarAlgoritmo(textArea2.getText());
+                }
             }
         });
     }

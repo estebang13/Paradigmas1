@@ -27,23 +27,28 @@ public class Modelo extends Observable {
     public static Modelo obtenerInstancia() {
         return (modelo == null) ? modelo = new Modelo() : modelo;
     }
-    
-    public Gramatica getGramatica(){
+
+    public Gramatica getGramatica() {
         return gramatica;
     }
-    
-    public boolean comprobarGramatica(String original){
+
+    public boolean comprobarGramatica(String original) {
         boolean bandera = gramatica.comprobarGramatica(original);
-        if(bandera){
+        if (bandera) {
             markov.setAlfabeto(gramatica.getAlfabeto());
             markov.setMarcadores(gramatica.getMarcadores());
             markov.setVariables(gramatica.getVariables());
+            markov.setListaReglas(gramatica.getReglas());
         }
         return bandera;
     }
-    
-    public void aplicarAlgoritmo(String entrada){
+
+    public void aplicarAlgoritmo(String entrada) {
         markov.setEntrada(entrada);
+        markov.setAlfabeto(gramatica.getAlfabeto());
+        markov.setMarcadores(gramatica.getMarcadores());
+        markov.setVariables(gramatica.getVariables());
+        markov.setListaReglas(gramatica.getReglas());
         markov.aplicarAlgoritmo();
     }
 

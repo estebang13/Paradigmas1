@@ -29,6 +29,10 @@ public class Control {
     public Gramatica getGramatica(){
         return modelo.getGramatica();
     }
+    
+    public void aplicarAlgoritmo(String entrada){
+        modelo.aplicarAlgoritmo(entrada);
+    }
 
     public void agregarObservable(Observer o) {
         modelo.addObserver(o);
