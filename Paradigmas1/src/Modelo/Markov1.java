@@ -43,14 +43,6 @@ public class Markov1 {
         this.listaReglas = listaReglas;
     }
 
-    public ArrayList<Variable> getListaVariables() {
-        return listaVariables;
-    }
-
-    public void setListaVariables(ArrayList<Variable> listaVariables) {
-        this.listaVariables = listaVariables;
-    }
-
     public String getAlfabeto() {
         return alfabeto;
     }
@@ -85,12 +77,6 @@ public class Markov1 {
         this.entrada = entrada;
     }
 
-    public void iniciarListaVariables() {
-        for (int i = 0; i < variables.length(); i++) {
-            listaVariables.add(new Variable(String.valueOf(variables.charAt(i)), ""));
-        }
-    }
-
     public void aplicarAlgoritmo() {
         for (Regla regla : listaReglas) {
             m1 = regexMarks.matcher(entrada);
@@ -98,11 +84,13 @@ public class Markov1 {
             boolean banderaM1 = m1.find();
             boolean banderaM2 = m2.find();
             if (banderaM1 && banderaM2) {
-                if (entrada.length() <= regla.getInicio().length()) {
-                    for (int j = 0; j < entrada.length(); j++) {
-                    }
-                } else {
-                    for (int j = 0; j < regla.getInicio().length(); j++) {
+                for (int i = 0; i < regla.getInicio().length(); i++) {
+                    String palabra = String.valueOf(regla.getInicio().charAt(i));
+                    if (regexMarks.matcher(palabra).find()) {
+                        if (entrada.contains(palabra)) {
+                            boolean bandera = aplicarRega(regla, i);
+
+                        }
                     }
                 }
             }
@@ -111,5 +99,58 @@ public class Markov1 {
 
         }
 
+    }
+
+    public boolean aplicarRega(Regla regla, int posMarca) {
+        boolean bandera = false;
+        int posMarcaEntrada = -1;
+        for (int i = 0; i < entrada.length(); i++) {
+            if (entrada.charAt(i) == regla.getInicio().charAt(posMarca)) {
+                posMarcaEntrada = i;
+                break;
+            }
+        }
+        if (posMarcaEntrada != -1) {
+            int tamEntrada = entrada.length();
+            int tamRegla = regla.getInicio().length();
+            if (((posMarcaEntrada - posMarca) >= 0)
+                    && ((posMarcaEntrada + ((tamRegla - 1) - posMarca)) < tamEntrada)) {
+                listaVariables = new ArrayList<>();
+                for (int i = posMarcaEntrada - posMarca, j = 0; i < (posMarcaEntrada + (tamRegla - posMarca)); i++, j++) {
+                    listaVariables.add(new Variable(String.valueOf(regla.getInicio().charAt(j)),
+                            String.valueOf(entrada.charAt(i))));
+                }
+                if (comprobarVariables()) {
+
+                }
+            }
+
+        }
+        return bandera;
+    }
+
+    public boolean comprobarVariables() {
+        boolean bandera = true;
+        int j = 0;
+        for (Variable variable : listaVariables) {
+            m1 = regexMarks.matcher(variable.getVar());
+            if (m1.find()) {
+                if (!variable.getVar().equals(variable.getValor())) {
+                    bandera = false;
+                    break;
+                }
+            } else {
+                for (int i = j + 1; i < listaVariables.size(); i++) {
+                    if (variable.getVar().equals(listaVariables.get(i).getVar())) {
+                        if (!variable.getValor().equals(listaVariables.get(i).getValor())) {
+                            bandera = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            j++;
+        }
+        return bandera;
     }
 }

@@ -38,7 +38,6 @@ public class Modelo extends Observable {
             markov.setAlfabeto(gramatica.getAlfabeto());
             markov.setMarcadores(gramatica.getMarcadores());
             markov.setVariables(gramatica.getVariables());
-            markov.iniciarListaVariables();
         }
         return bandera;
     }
