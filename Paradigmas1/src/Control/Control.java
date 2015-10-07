@@ -25,13 +25,21 @@ public class Control {
     public static Control obtenerInstancia() {
         return (control == null) ? control = new Control() : control;
     }
-    
-    public Gramatica getGramatica(){
-        return modelo.getGramatica();
+
+    public boolean comprobarGramatica(String original) {
+        return modelo.comprobarGramatica(original);
     }
-    
-    public void aplicarAlgoritmo(String entrada){
+
+    public void aplicarAlgoritmo(String entrada) {
         modelo.aplicarAlgoritmo(entrada);
+    }
+
+    public String getEntradaModificada() {
+        return modelo.getEntradaModificada();
+    }
+
+    public String getBug() {
+        return modelo.getBug();
     }
 
     public void agregarObservable(Observer o) {

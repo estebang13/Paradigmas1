@@ -15,13 +15,13 @@ import java.util.Observable;
 public class Modelo extends Observable {
 
     private static Modelo modelo;
-    private Markov1 markov;
+    private Markov markov;
     private Gramatica gramatica;
 
     private Modelo() {
         //gramaticas = new ArrayList<>();
         gramatica = new Gramatica("1");
-        markov = new Markov1();
+        markov = new Markov();
     }
 
     public static Modelo obtenerInstancia() {
@@ -33,14 +33,7 @@ public class Modelo extends Observable {
     }
 
     public boolean comprobarGramatica(String original) {
-        boolean bandera = gramatica.comprobarGramatica(original);
-        if (bandera) {
-            markov.setAlfabeto(gramatica.getAlfabeto());
-            markov.setMarcadores(gramatica.getMarcadores());
-            markov.setVariables(gramatica.getVariables());
-            markov.setListaReglas(gramatica.getReglas());
-        }
-        return bandera;
+        return gramatica.comprobarGramatica(original);
     }
 
     public void aplicarAlgoritmo(String entrada) {
@@ -54,6 +47,10 @@ public class Modelo extends Observable {
 
     public String getEntradaModificada() {
         return markov.getEntrada();
+    }
+
+    public String getBug() {
+        return gramatica.getBug();
     }
 
     public void actualizar() {

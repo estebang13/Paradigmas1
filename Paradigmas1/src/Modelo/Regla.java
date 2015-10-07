@@ -21,6 +21,21 @@ public class Regla {
         this.trans = trans;
     }
 
+    public Regla(String id, String inicio, String trans, String sig) {
+        this.id = id;
+        this.inicio = inicio;
+        this.trans = trans;
+        this.sig = sig;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getInicio() {
         return inicio;
     }
@@ -37,4 +52,15 @@ public class Regla {
         this.trans = trans;
     }
 
+    public String getSig() {
+        return sig;
+    }
+
+    public void setSig(String sig) {
+        this.sig = sig;
+    }
+
+    public String toString() {
+        return id + " " + inicio + " -> " + trans + " " + sig;
+    }
 }

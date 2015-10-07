@@ -24,6 +24,7 @@ public class Gramatica {
     private String variables = "";
     private String marcadores = "";
     private ArrayList<Regla> reglas;
+    private String bug = "";
 
     public Gramatica(String id) {
         this.id = id;
@@ -61,41 +62,90 @@ public class Gramatica {
     public void setReglas(ArrayList<Regla> reglas) {
         this.reglas = reglas;
     }
-    
+
     public boolean comprobarGramatica(String original) {
+        bug = "";
         boolean cumple = true;
-        String[] vec = original.split("\n");
-        for (int i = 0; i < vec.length; i++) {
-            if (!vec[i].equals("")) {
-                if (vec[i].contains("#symbols")) {
-                    alfabeto = vec[i].substring(8);
-                    System.out.println("contiene secuencia y alfabeto es: " + alfabeto);
+
+        for (int i = 0; i < original.length(); i++) {
+            if (original.charAt(i) == '%') {
+                while (original.charAt(i) != '\n') {
+                    i++;
                 }
-                if (vec[i].contains("#vars")) {
-                    variables = vec[i].substring(5);
-                    System.out.println("contiene secuencia y variables son: " + variables);
-                }
-                if (vec[i].contains("#markers")) {
-                    marcadores = vec[i].substring(8);
-                    System.out.println("contiene secuencia y marcadores son: " + marcadores);
-                }
-                if ((!marcadores.equals("")) && (!alfabeto.equals("")) && (!variables.equals(""))) {
-                    break;
+            } else {
+                if (original.charAt(i) == '#') {
+                    String valor = "";
+                    while (original.charAt(i) != '\n') {
+                        valor += original.charAt(i);
+                        i++;
+                    }
+                    if (valor.contains("#symbols")) {
+                        String[] aux = valor.split("#symbols");
+                        bug += "Estos son los simbolos ";
+                        valor = "";
+                        for (int j = 0; j < aux[1].length(); j++) {
+                            if (aux[1].charAt(j) != ' ') {
+                                valor += aux[1].charAt(j);
+                            }
+                        }
+                        bug += valor + "\n";
+                        this.alfabeto = valor;
+                    } else {
+                        if (valor.contains("#vars")) {
+                            String[] aux = valor.split("#vars");
+                            bug += "Estas son las variables ";
+                            valor = "";
+                            for (int j = 0; j < aux[1].length(); j++) {
+                                if (aux[1].charAt(j) != ' ') {
+                                    valor += aux[1].charAt(j);
+                                }
+                            }
+                            bug += valor + "\n";
+                            this.variables = valor;
+                        } else {
+                            if (valor.contains("#markers")) {
+                                String[] aux = valor.split("#markers");
+                                bug += "Estos son los marcadores ";
+                                valor = "";
+                                for (int j = 0; j < aux[1].length(); j++) {
+                                    if (aux[1].charAt(j) != ' ') {
+                                        valor += aux[1].charAt(j);
+                                    }
+                                }
+                                bug += valor + "\n";
+                                this.marcadores = valor;
+                            }
+                        }
+                    }
+                } else {
+                    if (original.charAt(i) != ' ' && original.charAt(i) != '\n') {
+                        String aux = "";
+                        try {
+                            while (original.charAt(i) != ';') {
+                                if (original.charAt(i) != ' ' && original.charAt(i) != '\n') {
+                                    aux += original.charAt(i);
+                                }
+                                i++;
+                            }
+                            aux += original.charAt(i);
+                            cumple = crearRegla(aux);
+                            if (!cumple) {
+                                break;
+                            }
+                        } catch (Exception ex) {
+                            cumple = false;
+                        }
+                    }
                 }
             }
         }
-        if (alfabeto.equals("")) {
-            alfabeto = ALFABETOFINAL;
+        if (cumple) {
+            for (Regla regla : reglas) {
+                bug += "regla: " + regla.toString();
+            }
         }
-        if (variables.equals("")) {
-            variables = VARIABLESFINAL;
-        }
-        if (marcadores.equals("")) {
-            marcadores = MARCADORES;
-        }
-
         Matcher m = ExprGrieg.matcher(alfabeto);
-        if (!m.find()) {
+        if ((!m.find()) && cumple) {
             m = ExprGrieg.matcher(variables);
             if (!m.find()) {
                 for (int i = 0; i < variables.length(); i++) {
@@ -106,20 +156,7 @@ public class Gramatica {
                 }
                 if (cumple) {
                     Pattern alfa = Pattern.compile("[a-z0-9]");
-                    m = alfa.matcher(marcadores);
-                    if (!m.find()) {
-                        //m = alfa.matcher(marcadores);////////////////////////////////////////////7
-                        for (int i = 0; i < vec.length; i++) {
-                            if (!vec[i].equals("")) {
-                                if ((!vec[i].contains("#symbols")) && (!vec[i].contains("#vars"))
-                                        && (!vec[i].contains("#markers"))) {
-                                    System.out.println(vec[i]);
-                                    String[] reg = vec[i].split("→");
-                                    reglas.add(new Regla(reg[0], reg[1]));
-                                }
-                            }
-                        }
-                    } else {
+                    if (alfa.matcher(marcadores).find()) {
                         cumple = false;
                     }
                 }
@@ -129,10 +166,79 @@ public class Gramatica {
         } else {
             cumple = false;
         }
-        for (int i = 0; i < reglas.size(); i++) {
-            System.out.println("reglas "+ i +" "+reglas.get(i).getInicio()+" -> "+
-                    reglas.get(i).getTrans());
-        }
         return cumple;
+    }
+
+    public String getBug() {
+        return bug;
+    }
+
+    public boolean crearRegla(String reglaProgra) {
+        String[] aux = reglaProgra.split("→");
+        Pattern regEti = Pattern.compile("^[P][0-9]+:[" + marcadores + variables + "]+");
+        Pattern regSin = Pattern.compile("[" + marcadores + variables + "]+");
+        Regla regla = new Regla("", "", "", "");
+        boolean bandera = true;
+        if (regEti.matcher(aux[0]).find()) {
+            int i = 0;
+            while (aux[0].charAt(i) != ':') {
+                regla.setId(regla.getId() + aux[0].charAt(i));
+                i++;
+            }
+            i++;
+            while (i < aux[0].length()) {
+                regla.setInicio(regla.getInicio() + aux[0].charAt(i));
+                i++;
+            }
+        } else {
+            if (regSin.matcher(aux[0]).find()) {
+                regla.setInicio(aux[0]);
+            } else {
+                bandera = false;
+            }
+        }
+        if (bandera) {
+            Pattern regTran1 = Pattern.compile("[" + marcadores + variables + "Λλ]+[.]{0,1}[\\(][P][0-9][\\)];");
+            Pattern regTran2 = Pattern.compile("[" + marcadores + variables + "Λλ]+[.]{0,1}[P][0-9];");
+            Pattern regTran3 = Pattern.compile("[" + marcadores + variables + "Λλ][.]{0,1};");
+            if (regTran1.matcher(aux[1]).find()) {
+                int i = 0;
+                while (aux[1].charAt(i) != '(') {
+                    regla.setTrans(regla.getTrans() + aux[1].charAt(i));
+                    i++;
+                }
+                i++;
+                while (aux[1].charAt(i) != ')') {
+                    regla.setSig(regla.getSig() + aux[1].charAt(i));
+                    i++;
+                }
+            } else {
+                if (regTran2.matcher(aux[1]).find()) {
+                    int i = 0;
+                    while (aux[1].charAt(i) != 'P') {
+                        regla.setTrans(regla.getTrans() + aux[1].charAt(i));
+                        i++;
+                    }
+                    while (aux[1].charAt(i) != ';') {
+                        regla.setSig(regla.getSig() + aux[1].charAt(i));
+                        i++;
+                    }
+                } else {
+                    if (regTran3.matcher(aux[1]).find()) {
+                        int i = 0;
+                        while (aux[1].charAt(i) != ';') {
+                            regla.setTrans(regla.getTrans() + aux[1].charAt(i));
+                            i++;
+                        }
+                    } else {
+                        bandera = false;
+                    }
+                }
+            }
+        }
+        if (bandera) {
+            reglas.add(regla);
+        }
+        return bandera;
     }
 }

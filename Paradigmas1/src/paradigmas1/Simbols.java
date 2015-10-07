@@ -9,10 +9,11 @@ import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 public class Simbols {
+
     public static void main(String args[]) {
         String[] tableData = {"Α α", "Β β", "Γ γ", "Δ δ", "Ε ε", "Ζ ζ", "Η η", "Θ θ", "Ι ι", "Κ κ", "Λ λ", "Μ μ", "Ν ν", "Ξ ξ", "Ο ο", "Π π", "Ρ ρ", "Σ σ ς", "Τ τ", "Υ υ", "Φ φ", "Χ χ", "Ψ ψ", "Ω ω"};
         JFrame frame = new JFrame("Simbols");
@@ -21,7 +22,9 @@ public class Simbols {
         JList jlist = new JList(tableData);
         JScrollPane scrollPane1 = new JScrollPane(jlist);
         contentPane.add(scrollPane1, BorderLayout.WEST);
-        ListSelectionListener listSelectionListener = new ListSelectionListener() {
+        ListSelectionListener listSelectionListener;
+        listSelectionListener = new ListSelectionListener() {
+            @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
                 boolean adjust = listSelectionEvent.getValueIsAdjusting();
                 if (!adjust) {
