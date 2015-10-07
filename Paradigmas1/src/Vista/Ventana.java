@@ -21,9 +21,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -36,6 +38,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -74,6 +77,47 @@ public class Ventana extends JFrame implements Observer {
         cargarPanel();
         ajustarEventos();
         this.setVisible(true);
+    }
+
+    private String abrirArchivo() {
+        String aux = "";
+        String texto = "";
+        try {
+            JFileChooser file = new JFileChooser();
+            file.showOpenDialog(this);
+            File abre = file.getSelectedFile();
+            if (abre != null) {
+                FileReader archivos = new FileReader(abre);
+                BufferedReader lee = new BufferedReader(archivos);
+                while ((aux = lee.readLine()) != null) {
+                    texto += aux + "\n";
+                }
+                lee.close();
+            }
+        } catch (IOException ex) {
+            textArea3.setText(ex + "" + "\nNo se ha encontrado el archivo");
+        }
+        return texto;//El texto se almacena en el JTextArea
+    }
+
+    private void guardarArchivo(JTextArea textArea) {
+        try {
+            String nombre = "";
+            JFileChooser file = new JFileChooser();
+            file.showSaveDialog(this);
+            File guarda = file.getSelectedFile();
+
+            if (guarda != null) {
+                /*guardamos el archivo y le damos el formato directamente,
+                 * si queremos que se guarde en formato doc lo definimos como .doc*/
+                FileWriter save = new FileWriter(guarda + ".txt");
+                save.write(textArea.getText());
+                save.close();
+                textArea3.setText("El archivo se a guardado Exitosamente");
+            }
+        } catch (IOException ex) {
+            textArea3.setText(ex + "" + "\nNo se ha encontrado el archivo");
+        }
     }
 
     private void configuracionInicial() {
@@ -256,20 +300,12 @@ public class Ventana extends JFrame implements Observer {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                File fi = new File("gramactica.txt");
+                String a = abrirArchivo();
                 try {
-                    String linea = "";
-                    FileReader fr = new FileReader(fi);
-                    String val = "";
-                    BufferedReader br = new BufferedReader(fr);
-                    while ((linea = br.readLine()) != null) {
-                        val += linea + "\n";
-                    }
-                    textArea1.setText(val);
-                    br.close();
-                    fr.close();
+                    textArea1.setText(a);
                 } catch (Exception ex) {
-                    System.err.println("error: " + "\n" + ex.getMessage());
+                    textArea3.setText("");
+                    textArea3.setText("error: " + "\n" + ex.getMessage());
                 }
             }
         });
@@ -277,39 +313,50 @@ public class Ventana extends JFrame implements Observer {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("listener cargar entradas");
+                String a = abrirArchivo();
+                try {
+                    textArea2.setText(a);
+                } catch (Exception ex) {
+                    textArea3.setText("");
+                    textArea3.setText("error: " + "\n" + ex.getMessage());
+                }
             }
         });
+
         guardarAlgol.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (textArea1.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Debe de escribir la gramatica a guardar");
-                } else {
-                    File fi = new File("gramactica.txt");
-                    try {
-                        FileWriter fw = new FileWriter(fi);
-                        fw.write(textArea1.getText());
-                        fw.flush();
-                        fw.close();
-                    } catch (Exception ex) {
-                        System.err.println("error: " + ex.getMessage());
-                    }
+                try {
+                    guardarArchivo(textArea1);
+                } catch (Exception ex) {
+                    textArea3.setText("");
+                    textArea3.setText("error: " + "\n" + ex.getMessage());
                 }
             }
         });
+
         guardarEnt.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    guardarArchivo(textArea2);
+                } catch (Exception ex) {
+                    textArea3.setText("");
+                    textArea3.setText("error: " + "\n" + ex.getMessage());
+                }
             }
         });
         guardarEjec.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("listener cargar entradas");
+                try {
+                    guardarArchivo(textArea3);
+                } catch (Exception ex) {
+                    textArea3.setText("");
+                    textArea3.setText("error: " + "\n" + ex.getMessage());
+                }
             }
         });
         compAlgol.addActionListener(new ActionListener() {

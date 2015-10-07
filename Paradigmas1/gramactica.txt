@@ -1,7 +1,7 @@
-#symbols abcdefghijklmnopqrstuvwxyz0123456789
-#vars wxyz
-#markers ξβγδ
-
-βx→xβ
-xβ→Λ.
-x→βx
+% Algoritmo 2 (Binario-Unario).
+% Este es un algoritmo para pasar un numero binario a unario
+#symbols 0123456789
+#markers |
+"|0" -> "0||";
+"1" -> "0|";
+"0" -> "Λ.";
