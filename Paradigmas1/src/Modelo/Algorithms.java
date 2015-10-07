@@ -40,6 +40,15 @@ public class Algorithms {
         return false;
     }
 
+    public static String BynaryUnary(String a) {
+        int a1 = Integer.parseInt(a, 2);
+        String sResult1 = "";
+        for (int x = 0; x < a1; x++) {
+            sResult1 = sResult1 + "|";
+        }
+        return sResult1;
+    }
+
     public static String BinarySuma(String a, String b) {
         int a1 = Integer.parseInt(a, 2);
         int b1 = Integer.parseInt(b, 2);
